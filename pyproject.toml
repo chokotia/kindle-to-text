@@ -6,6 +6,7 @@ authors = []
 readme = "README.md"
 packages = [
     { include = "kindle_screenshot", from = "src" },
+    { include = "kindle_crop", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -16,6 +17,7 @@ pygetwindow = "^0.0.9"
 
 [tool.poetry.scripts]
 kindle-screenshot = "kindle_screenshot.cli:main"
+kindle-crop = "kindle_crop.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
