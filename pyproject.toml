@@ -1,0 +1,22 @@
+[tool.poetry]
+name = "kindle-to-text"
+version = "0.1.0"
+description = "Kindle書籍コンテンツをテキストに変換するツール"
+authors = []
+readme = "README.md"
+packages = [
+    { include = "kindle_screenshot", from = "src" },
+]
+
+[tool.poetry.dependencies]
+python = "^3.10"
+pyautogui = "^0.9.54"
+Pillow = "^10.0.0"
+pygetwindow = "^0.0.9"
+
+[tool.poetry.scripts]
+kindle-screenshot = "kindle_screenshot.cli:main"
+
+[build-system]
+requires = ["poetry-core"]
+build-backend = "poetry.core.masonry.api"
