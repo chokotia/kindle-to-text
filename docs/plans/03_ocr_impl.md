@@ -44,7 +44,7 @@ kindle-to-text/
 ### Step 2: 設定モジュール (`config.py`)
 - 入力ディレクトリ (`output/cropped/`)
 - 出力ディレクトリ (`output/text/`)
-- モデル名 (`gemini-2.0-flash`)
+- モデル名 (`gemini-3-flash-preview`)
 - デフォルトプロンプト
 - リクエスト間隔 (1.0秒)
 
@@ -91,7 +91,7 @@ import google.generativeai as genai
 from PIL import Image
 
 genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-model = genai.GenerativeModel("gemini-2.0-flash")
+model = genai.GenerativeModel("gemini-3-flash-preview")
 image = Image.open(image_path)
 response = model.generate_content([prompt, image])
 text = response.text

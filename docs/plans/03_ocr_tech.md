@@ -84,4 +84,4 @@ gemini --media "image.png" "この画像のテキストを抽出してくださ�
 - Anthropic の Claude で画像認識
 - 高精度だが、Gemini より高コスト
 
-※ ローカルOCR（pytesseract, easyocr 等）は候補外。縦書き/横書き、レイアウト解析が必要で、日本語精度も VLM に劣るため。
+※ ローカルOCR（pytesseract, easyocr 等）は候補外。縦書き/横書き、レイアウト解析が必要で、精度が掛け算になりることから最終的な精度が VLM に劣るため。

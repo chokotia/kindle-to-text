@@ -7,6 +7,7 @@ readme = "README.md"
 packages = [
     { include = "kindle_screenshot", from = "src" },
     { include = "kindle_crop", from = "src" },
+    { include = "kindle_ocr", from = "src" },
 ]
 
 [tool.poetry.dependencies]
@@ -14,10 +15,12 @@ python = "^3.10"
 pyautogui = "^0.9.54"
 Pillow = "^10.0.0"
 pygetwindow = "^0.0.9"
+google-genai = "^1.57.0"
 
 [tool.poetry.scripts]
 kindle-screenshot = "kindle_screenshot.cli:main"
 kindle-crop = "kindle_crop.cli:main"
+kindle-ocr = "kindle_ocr.cli:main"
 
 [build-system]
 requires = ["poetry-core"]
