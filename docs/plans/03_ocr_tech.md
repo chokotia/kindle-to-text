@@ -61,13 +61,32 @@ gemini --media "image.png" "この画像のテキストを抽出してくださ�
      - https://github.com/google-gemini/gemini-cli/issues/12867
      - https://github.com/google-gemini/gemini-cli/issues/2997
 
-### 2025-01: Gemini API (2.0 Flash)（採用）
+### 2025-01: Gemini API (2.0 Flash)（検証後に変更）
 
-**理由:**
+**当初の理由:**
 - `google-generativeai` Python SDK で画像入力が可能
 - 高速（1〜3秒/枚）かつ無料枠で十分
 - 日本語の文脈理解が優秀
 - 実装がシンプル（API キー設定 + 数行のコード）
+
+**検証結果:** → Gemini 3.0 Flash Preview に変更
+
+1. **Gemini 2.0 Flash / 1.5 の精度問題**
+   - 段落が前後する（順序がおかしい）
+   - 文章の抜けが発生する
+   - 書籍のOCRには精度が不十分
+
+2. **Gemini 3.0 Flash Preview で大幅改善**
+   - 段落の順序が正確
+   - テキスト抽出の精度が高い
+   - 日本語書籍のOCRに十分な品質
+
+3. **SDK の変更: `google-generativeai` → `google-genai`**
+   - `google-generativeai` は古いSDK
+   - 新しい `google-genai` (v1.57.0+) を採用
+   - より安定したAPI呼び出しが可能
+
+**最終採用:** Gemini 3.0 Flash Preview + `google-genai` SDK
 
 **実装:** → `03_ocr_impl.md` 参照
 
@@ -84,4 +103,4 @@ gemini --media "image.png" "この画像のテキストを抽出してくださ�
 - Anthropic の Claude で画像認識
 - 高精度だが、Gemini より高コスト
 
-※ ローカルOCR（pytesseract, easyocr 等）は候補外。縦書き/横書き、レイアウト解析が必要で、精度が掛け算になりることから最終的な精度が VLM に劣るため。
+※ ローカルOCR（pytesseract, easyocr 等）は候補外。縦書き/横書き、レイアウト解析が必要で、精度が掛け算になることから最終的な精度が VLM に劣ると判断したため。

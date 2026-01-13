@@ -1,6 +1,7 @@
 # Kindle OCR - 実装計画
 
-採用技術: **Gemini API (2.0 Flash)**
+採用技術: **Gemini API (3.0 Flash Preview)**
+SDK: **google-genai v1.57.0+**
 技術選定の経緯: → `03_ocr_tech.md` 参照
 
 ## 入出力
@@ -10,7 +11,7 @@
 ## 技術スタック
 - Python 3.10+
 - Poetry (依存関係管理)
-- `google-generativeai` (Gemini 2.0 Flash API)
+- `google-genai` v1.57.0+ (Gemini API SDK)
 
 ## 前提条件
 - 環境変数 `GOOGLE_API_KEY` にAPIキーを設定
@@ -37,23 +38,24 @@ kindle-to-text/
 ## 実装ステップ
 
 ### Step 1: pyproject.toml 更新
-- `google-generativeai` 依存関係追加
+- `google-genai` 依存関係追加
 - `kindle_ocr` パッケージ追加
 - `kindle-ocr` スクリプトエントリポイント追加
 
 ### Step 2: 設定モジュール (`config.py`)
 - 入力ディレクトリ (`output/cropped/`)
 - 出力ディレクトリ (`output/text/`)
-- モデル名 (`gemini-3-flash-preview`)
-- デフォルトプロンプト
+- モデル名 (`gemini-3-flash-preview`) ← Gemini 3.0 Flash Preview
+- デフォルトプロンプト（日本語OCR用、段落順序維持を明示）
 - リクエスト間隔 (1.0秒)
 
 ### Step 3: OCR処理 (`ocr.py`)
-- `configure_api()`: 環境変数からAPI設定
-- `extract_text_from_image()`: Gemini APIでテキスト抽出
+- `get_client()`: 環境変数からGemini APIクライアント取得
+- `extract_text_from_image()`: Gemini 3.0 APIでテキスト抽出
 - `save_text()`: テキストファイル保存
+- `get_image_files()`: 入力画像ファイルの取得
 - `process_all_images()`: バッチ処理
-- `preview_ocr()`: プレビューモード
+- `preview_ocr()`: プレビューモード（1枚目のみテスト）
 
 ### Step 4: CLIインターフェース (`cli.py`)
 - argparse でコマンドライン引数解析
@@ -87,13 +89,20 @@ poetry run kindle-ocr --delay 2.0
 ## 内部処理
 
 ```python
-import google.generativeai as genai
+from google import genai
 from PIL import Image
 
-genai.configure(api_key=os.environ["GOOGLE_API_KEY"])
-model = genai.GenerativeModel("gemini-3-flash-preview")
+# クライアント初期化
+client = genai.Client(api_key=os.environ["GOOGLE_API_KEY"])
+
+# 画像読み込み
 image = Image.open(image_path)
-response = model.generate_content([prompt, image])
+
+# テキスト抽出
+response = client.models.generate_content(
+    model="gemini-3-flash-preview",
+    contents=[prompt, image]
+)
 text = response.text
 ```
 
