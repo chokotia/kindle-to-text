@@ -13,27 +13,27 @@ Kindle to Text は、Kindleの書籍コンテンツをテキストに変換す�
 ## 技術スタック
 
 - Python 3.10+
-- Poetry（依存関係管理）
-- 主要ライブラリ: pyautogui, Pillow, pygetwindow, PyYAML
-- 外部ツール: Gemini CLI（OCRフェーズで使用）
+- uv（依存関係管理）
+- 主要ライブラリ: pyautogui, Pillow, pygetwindow, google-genai
+- 外部ツール: Gemini API（OCRフェーズで使用）
 
 ## コマンド
 
 ```bash
 # 依存関係インストール
-poetry install
+uv sync
 
 # Phase 1: スクリーンショット（Kindleアプリを開いた状態で実行）
-poetry run kindle-screenshot <ページ数> [-d 遅延秒] [--full-screen]
+uv run kindle-screenshot <ページ数> [-d 遅延秒] [--full-screen]
 
 # Phase 2: クロップ
-poetry run kindle-crop [--top N] [--bottom N] [--left N] [--right N] [--preview]
+uv run kindle-crop [--top N] [--bottom N] [--left N] [--right N] [--preview]
 
 # Phase 3: OCR
-poetry run kindle-ocr [--prompt "カスタムプロンプト"]
+uv run kindle-ocr [--prompt "カスタムプロンプト"]
 
 # Phase 4: 結合（chapters.yamlが必要）
-poetry run kindle-merge [-c config.yaml]
+uv run kindle-merge [-c config.yaml]
 ```
 
 ## プロジェクト構成
@@ -42,7 +42,7 @@ poetry run kindle-merge [-c config.yaml]
 src/
 ├── kindle_screenshot/  # Phase 1: capture.py, window.py, cli.py, config.py
 ├── kindle_crop/        # Phase 2: crop.py, cli.py, config.py
-├── kindle_ocr/         # Phase 3: ocr.py（Gemini CLI呼び出し）, cli.py, config.py
+├── kindle_ocr/         # Phase 3: ocr.py（Gemini API呼び出し）, cli.py, config.py
 └── kindle_merge/       # Phase 4: merge.py, cli.py, config.py
 
 output/
@@ -63,5 +63,5 @@ output/
 
 - スクリーンショット緊急停止: マウスを画面左上(0,0)に移動
 - クロップマージンは本のレイアウトで異なる。`--preview`でバッチ処理前にテスト推奨
-- OCRはGemini CLIをsubprocessで呼び出し。APIレート制限に注意
+- OCRはGemini APIを呼び出し。APIレート制限に注意
 - 日本語テキストが主対象
